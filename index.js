@@ -66,7 +66,7 @@ if(!_.isArray(inputJson)){
     exit(1);
 }
 
-var stream = fs.createWriteStream(path.join(argv.output, 'request-data.txt'));
+var stream = fs.createWriteStream(path.join(argv.output, 'data.json'));
 stream.on('finish', function() {
 	console.log(colors.green('completed, wrote: ' + counter + ' record(s)'));
 });
@@ -78,9 +78,8 @@ stream.once('open', function(fd) {
 
     _.each(inputJson, function(record){
 
-        var recordPrologue = { index: { '_index': argv.index, '_id': record.id, '_type': argv.type } };
+        var recordPrologue = { '_index': argv.index, '_id': record.id, '_type': argv.type, '_source': record };
         stream.write(JSON.stringify(recordPrologue) + '\n');
-        stream.write(JSON.stringify(record) + '\n');
 
         //process.stdout.write('.');
 
